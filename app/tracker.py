@@ -1,4 +1,3 @@
-# God bless me 
 
 class Expense:
 
@@ -27,38 +26,93 @@ class ExpenseTracker:
         return sum(expense.amount for expense in self.expenses)
 
     def filter_by_category(self, category):
-        return [expense for expense in self.expenses if expense.category == category]
+        return [expense for expense in self.expenses if expense.category.lower() == category.lower()]
+
+
+def print_menu():
+    print('=== Expense Tracker ===\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Выйти')
+
+
+def parse_amount(amount_str):
+    if "." in amount_str or "," in amount_str:
+        return float(amount_str.replace(",", "."))
+    return int(amount_str)
+
+
+def handle_add_expense(tracker):
+    name = input('Название: ').strip()
+
+    while True:
+        amount_str = input('Сумма: ').strip()
+        try:
+            amount = parse_amount(amount_str)
+            if amount <= 0:
+                print('Сумма должна быть положительным числом. Попробуйте снова')
+                continue
+            break
+        except ValueError:
+            print('Некорректный ввод. Введите число, например 250 или 250.50')
+
+    category = input('Категория: ').strip()
+
+    tracker.add_expense(name, amount, category)
+    print('\nРасход добавлен\n')
+
+
+def handle_show_all(tracker):
+    expenses = tracker.get_all_expenses()
+
+    if not expenses:
+        print('Список расходов пуст\n')
+        return
+
+    for index, expense in enumerate(expenses, start=1):
+        print(f"{index}. {expense}")
+    print()    
+
+
+def handle_show_total(tracker):
+    print(f'Total: {tracker.get_total_expenses()}')
+
+
+def handle_filter_by_category(tracker):
+    category = input('Введите категорию: ').strip()
+    found = tracker.filter_by_category(category)
+
+    if not found:
+        print(f"Расходов в категории '{category}' не найдено.\n")
+        return
+
+    for expense in found:
+        print(f"{expense.name} - {expense.amount}")
+    print()
 
 
 def main():
     tracker = ExpenseTracker()
  
     while True:
-        print('=== Expense Tracker ===\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Выйти')
-        choice = input('Выберите действие: ')
+        print_menu()
+        choice = input('Выберите действие: ').strip()
     
-        if int(choice) == 1:
-            name = input('Название расхода: ')
-            amount = int(input('Сумма: '))
-            category = input('Категория: ')
-            tracker.add_expense(name, amount, category)
+        if choice == '1':
+            handle_add_expense(tracker)
     
-        elif int(choice) == 2:
-            expenses_list = tracker.get_all_expenses()
-            for index, expense in enumerate(expenses_list, start=1):
-                print(f"{index}. {expense}")
+        elif choice == '2':
+            handle_show_all(tracker)
     
-        elif int(choice) == 3:
-            print(f'Total: {tracker.get_total_expenses()}')
+        elif choice == '3':
+            handle_show_total(tracker)
     
-        elif int(choice) == 4:
-            category = input('Какая категория? ')
-            found = tracker.filter_by_category(category)
-            for expense in found:
-                print(f"{expense.name} - {expense.amount}")
+        elif choice == '4':
+            handle_filter_by_category(tracker)
     
-        elif int(choice) == 5:
+        elif choice == '5':
+            print("Выход из программы")
             break
+
+        else:
+            print("Введите число от 1 до 5\n")
 
 if __name__ == "__main__":
     main()        
