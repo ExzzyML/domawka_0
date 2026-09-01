@@ -80,6 +80,15 @@ def handle_show_total(tracker):
 
 
 def handle_filter_by_category(tracker):
+    expenses = tracker.get_all_expenses()
+
+    if not expenses:
+        print('Список расходов пуст — категорий пока нет.\n')
+        return
+
+    categories = sorted(set(expense.category.lower() for expense in expenses))
+    print('Доступные категории:', ', '.join(categories))
+
     category = input('Введите категорию: ').strip()
     found = tracker.filter_by_category(category)
 
