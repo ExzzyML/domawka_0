@@ -33,7 +33,8 @@ class ExpenseTracker:
 
 
 def print_menu():
-    print('=== Expense Tracker ===\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Статистика расходов\n6. Визуализация расходов\n7. Выйти')
+    print()
+    print('=== Трекер Расходов ===\n\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Статистика расходов\n6. Визуализация расходов\n7. Выйти')
 
 
 def parse_amount(amount_str):
@@ -116,7 +117,7 @@ def get_category_totals(tracker):
     return totals
 
 def print_visualization_menu():
-    print('=== Визуализация расходов ===\n1. Круговая диаграмма по категориям\n2. Столбчатая диаграмма по категориям\n3. Гистограмма распределения всех расходов\n4. Линейный график расхходов по дням\n5. Назад')
+    print('=== Визуализация Расходов ===\n\n1. Круговая диаграмма по категориям\n2. Столбчатая диаграмма по категориям\n3. Гистограмма распределения всех расходов\n4. Линейный график расхходов по дням\n5. Назад')
 
 
 def handle_visualization(tracker):
@@ -128,6 +129,7 @@ def handle_visualization(tracker):
 
     while True:
         print_visualization_menu()
+        print()
         choice = input('Выберите график: ').strip()
         print()
 
@@ -159,7 +161,9 @@ def main():
  
     while True:
         print_menu()
+        print()
         choice = input('Выберите действие: ').strip()
+        print()
     
         if choice == '1':
             handle_add_expense(tracker)
