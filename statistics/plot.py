@@ -13,7 +13,7 @@ def piecat(values, labels):
 def barcat(values, labels):
     plt.bar(labels, values, color='orange', width=0.5)
     plt.xlabel('Категория')
-    plt.ylabel('Расходы')
+    plt.ylabel('Сумма')
     plt.title('Общие расходы по категориям')
     plt.show()
 
@@ -21,7 +21,17 @@ def barcat(values, labels):
 # Гистограмма
 def histcat(values):
     plt.hist(values, bins='auto', color='red', alpha=0.75)
-    plt.xlabel('Расходы')
+    plt.xlabel('Сумма')
     plt.ylabel('Количество')
     plt.title('Распределение всех расходов')
+    plt.show()
+
+
+# Линейный график
+def linecat(values):
+    days = list(range(1, len(values) + 1))
+    plt.plot(days, values, color='blue')
+    plt.xlabel('День')
+    plt.ylabel('Сумма')
+    plt.title('Расходы по дням')
     plt.show()
