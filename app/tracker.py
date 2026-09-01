@@ -1,3 +1,6 @@
+from stats.defstatistics import mean, median, minimum, maximum, std
+from stats.plot import piecat, barcat, histcat, linecat
+
 
 class Expense:
 
@@ -30,7 +33,7 @@ class ExpenseTracker:
 
 
 def print_menu():
-    print('=== Expense Tracker ===\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Выйти')
+    print('=== Expense Tracker ===\n1. Добавить расход\n2. Показать все расходы\n3. Показать общую сумму расходов\n4. Показать расходы по категории\n5. Статистика расходов\n6. Визуализация расходов\n7. Выйти')
 
 
 def parse_amount(amount_str):
@@ -80,12 +83,75 @@ def handle_filter_by_category(tracker):
     found = tracker.filter_by_category(category)
 
     if not found:
-        print(f"Расходов в категории '{category}' не найдено.\n")
+        print(f"Расходов в категории '{category}' не найдено\n")
         return
 
     for expense in found:
         print(f"{expense.name} - {expense.amount}")
     print()
+
+
+def handle_show_statistics(tracker):
+    expenses = tracker.get_all_expenses()
+
+    if not expenses:
+        print('Список расходов пуст\n')
+        return
+
+    amounts = [expense.amount for expense in expenses]
+
+    print(f'Средний расход: {mean(amounts):.1f}')
+    print(f'Медианный расход: {median(amounts)}')
+    print(f'Минимальный расход: {minimum(amounts)}')
+    print(f'Максимальный расход: {maximum(amounts)}')
+    print(f'Стандартное отклонение: {std(amounts):.1f}\n')
+
+
+def get_category_totals(tracker):
+    expenses = tracker.get_all_expenses()
+    totals = {}
+    for expense in expenses:
+        category = expense.category.lower()
+        totals[category] = totals.get(category, 0) + expense.amount
+    return totals
+
+def print_visualization_menu():
+    print('=== Визуализация расходов ===\n1. Круговая диаграмма по категориям\n2. Столбчатая диаграмма по категориям\n3. Гистограмма распределения всех расходов\n4. Линейный график расхходов по дням\n5. Назад')
+
+
+def handle_visualization(tracker):
+    expenses = tracker.get_all_expenses()
+
+    if not expenses:
+        print('Список расходов пуст — нечего визуализировать.\n')
+        return
+
+    while True:
+        print_visualization_menu()
+        choice = input('Выберите график: ').strip()
+        print()
+
+        if choice == '1':
+            totals = get_category_totals(tracker)
+            piecat(list(totals.values()), list(totals.keys()))
+
+        elif choice == '2':
+            totals = get_category_totals(tracker)
+            barcat(list(totals.values()), list(totals.keys()))
+
+        elif choice == '3':
+            amounts = [expense.amount for expense in expenses]
+            histcat(amounts)
+
+        elif choice == '4':
+            amounts = [expense.amount for expense in expenses]
+            linecat(amounts)
+
+        elif choice == '5':
+            break
+
+        else:
+            print('Введите число от 1 до 5\n')
 
 
 def main():
@@ -106,13 +172,19 @@ def main():
     
         elif choice == '4':
             handle_filter_by_category(tracker)
-    
+
         elif choice == '5':
+            handle_show_statistics(tracker)
+
+        elif choice == '6':
+            handle_visualization(tracker)
+
+        elif choice == '7':
             print("Выход из программы")
             break
 
         else:
-            print("Введите число от 1 до 5\n")
+            print("Введите число от 1 до 7\n")
 
 if __name__ == "__main__":
     main()        
