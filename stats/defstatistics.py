@@ -1,6 +1,3 @@
-values = [10, 15, 20, 20, 25, 30, 100]
-
-
 # Среднее значение
 def mean(values):
     return sum(values) / len(values)

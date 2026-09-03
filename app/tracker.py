@@ -51,11 +51,11 @@ def handle_add_expense(tracker):
         try:
             amount = parse_amount(amount_str)
             if amount <= 0:
-                print('Сумма должна быть положительным числом. Попробуйте снова')
+                print('Сумма должна быть положительной')
                 continue
             break
         except ValueError:
-            print('Некорректный ввод. Введите число, например 250 или 250.50')
+            print('Некорректный ввод')
 
     category = input('Категория: ').strip()
 
